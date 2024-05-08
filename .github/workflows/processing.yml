@@ -1,0 +1,38 @@
+name: get website parsing
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron:  '*/5 * * * *' # 5분에 한번씩 실행한다. 5분당 한번씩 실행되지는 않는다. 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4    
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.9'
+        cache: 'pip' # caching pip dependencies
+    - run: pip install -r requirements.txt
+    - name: do check and notify
+      id: check_list
+      env:
+        TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
+      run: |
+        # 실행해보자 
+        python ./get_page_data.py
+    - name: git setting
+      run: |
+        git config --local user.email "my@email.com"
+        git config --local user.name "깃허브액션" # 커밋에 포함될 이름
+    - name: git add tempLast file and commit
+      run: |
+        git add .
+        git commit -m "자동 업데이트 진행" # 커밋 메세지
+    - name: push
+      uses: ad-m/github-push-action@master
+      with:
+        branch: 'main'
+        github_token: ${{ secrets.GIT_TOKEN}}
