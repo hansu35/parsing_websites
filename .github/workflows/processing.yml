@@ -28,10 +28,12 @@ jobs:
         git config --local user.email "my@email.com"
         git config --local user.name "깃허브액션" # 커밋에 포함될 이름
     - name: git add tempLast file and commit
+      if: ${{ steps.check_list.outputs.list_count > 0 }}
       run: |
         git add .
         git commit -m "자동 업데이트 진행" # 커밋 메세지
     - name: push
+      if: ${{ steps.check_list.outputs.list_count > 0 }}
       uses: ad-m/github-push-action@master
       with:
         branch: 'main'

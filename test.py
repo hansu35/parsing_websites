@@ -23,25 +23,40 @@ def process(data:ParseWebPage):
     print('파싱할 데이터가 없음')
     return (False, False)
   try:
-    page = requests.get(data.pageUrl)
+    print(f'파싱할 url {data.pageUrl}')
+
+    page = requests.get(data.pageUrl, headers={'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'})
     tree = html.fromstring(page.content)
     articleList = tree.xpath(data.listXpath)
 
     visitedUrls = []
 
+    print(page)
+
+    print('===================================')
+
     for article in articleList:
+
+      print(article)
 
       title = None
       link = None
-      print(f'하나의 글 : {article} / {article.items()}')
+      print(f'하나의 글 : {article} / {article.items()} /  타이틀 xpaht : {data.titleXpath} / link xpath: {data.linkXpath}')
       titleList = article.xpath(data.titleXpath)
+      print('1111')
       if(titleList != None and len(titleList) > 0):
         title = titleList[0].strip()
 
+      print(title)
+
+      print('22220')
+      print(data.linkXpath)
       linkList = article.xpath(data.linkXpath)
+      print('222211')
       if(linkList != None and len(linkList) > 0):
         link = linkList[0]
 
+      print('3333')
       print(f'{titleList} / {linkList}')
 
       if(title != None and link != None):
@@ -60,15 +75,4 @@ if __name__ == '__main__' :
   d.listXpath = sys.argv[2]
   d.linkXpath = sys.argv[3]
   d.titleXpath = sys.argv[4]
-  process(d)  
-
-    
-
-
-
-
-
-
-
-
-
+  process(d)

@@ -102,6 +102,8 @@ webSiteList = cur.fetchall()
 
 needCommit = False
 
+commitCount = 0
+
 for webSite in webSiteList:
   print(f'파싱 시작! 사이트 : {webSite}')
   site = ParseWebPage()
@@ -119,6 +121,7 @@ for webSite in webSiteList:
 
 if needCommit: 
   dbCon.commit()
+  commitCount = commitCount + 1
 
 dbCon.close()
 
@@ -127,3 +130,6 @@ logTime = time.strftime('%Y.%m.%d - %H:%M:%S')
 f = open('./lastCheckTime.log','w')
 f.write(logTime)
 f.close()
+
+
+os.system(f'echo \'list_count={commitCount}\' >> $GITHUB_OUTPUT')
