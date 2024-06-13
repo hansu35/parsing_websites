@@ -51,14 +51,14 @@ def process(data:ParseWebPage, cursor):
     return (False, False)
 
   try:
-    page = requests.get(data.pageUrl)
+    page = requests.get(data.pageUrl, headers={'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'})
     tree = html.fromstring(page.content)
     articleList = tree.xpath(data.listXpath)
 
     visitedUrls = []
 
     for article in articleList:
-
+    
       title = None
       link = None
       titleList = article.xpath(data.titleXpath)
