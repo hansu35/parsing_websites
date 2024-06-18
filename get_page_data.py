@@ -116,7 +116,7 @@ for webSite in webSiteList:
   result, oneSiteCommit = process(site, cur)
 
   print(f'파싱 완료! 결과는 : {result} / {oneSiteCommit}')
-  cur.execute(f"delete from {site.tableName} where checkDate < date('now','-1 day');")
+  #cur.execute(f"delete from {site.tableName} where checkDate < date('now','-1 day');")
   needCommit = needCommit or oneSiteCommit
 
 
