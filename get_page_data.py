@@ -69,7 +69,7 @@ def process(data:ParseWebPage, cursor):
       if(linkList != None and len(linkList) > 0):
         link = linkList[0]
 
-      if(title != None and link != None):
+      if(title != None and link != None and link.startswith("http") == True):
         
         cur.execute(f'SELECT count(*) FROM {data.tableName} where url=\'{link}\'')
         count = cur.fetchone()
@@ -116,6 +116,7 @@ for webSite in webSiteList:
   result, oneSiteCommit = process(site, cur)
 
   print(f'파싱 완료! 결과는 : {result} / {oneSiteCommit}')
+  cur.execute(f"delete from {site.tableName} where checkDate < date('now','-1 day');")
   needCommit = needCommit or oneSiteCommit
 
 
