@@ -55,7 +55,13 @@ def process(data:ParseWebPage, cursor):
     tree = html.fromstring(page.content)
     articleList = tree.xpath(data.listXpath)
 
+    damoangException = False
+    damoangUrl = "https://damoang.net"
+
     visitedUrls = []
+    if(data.pageUrl.startswith(damoangUrl)):
+      damoangException = True
+
 
     for article in articleList:
     
@@ -68,6 +74,10 @@ def process(data:ParseWebPage, cursor):
       linkList = article.xpath(data.linkXpath)
       if(linkList != None and len(linkList) > 0):
         link = linkList[0]
+        if(damoangException and link.startswith("/free/")):
+          link = f'{damoangUrl}{link}'
+
+      # print(f'하나의 글 : {article} / {article.items()} /  타이틀 xpaht : {data.titleXpath} 타이틀 {title}/ link xpath: {data.linkXpath} 링크 {link}')
 
       if(title != None and link != None and link.startswith("http") == True):
         
