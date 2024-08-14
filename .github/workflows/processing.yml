@@ -20,6 +20,8 @@ jobs:
       id: check_list
       env:
         TELEGRAM_BOT_TOKEN: ${{secrets.TELEGRAM_BOT_TOKEN}}
+        CLOUD_DB_AUTH_TOKEN: ${{secrets.CLOUD_DB_AUTH_TOKEN}}
+        CLOUD_DB_END_POINT: ${{secrets.CLOUD_DB_END_POINT}}
       run: |
         # 실행해보자 
         python ./get_page_data.py
