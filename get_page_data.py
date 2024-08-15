@@ -122,7 +122,7 @@ def processForOneSite(siteDataDict):
   try:
     # 이미 확인한 글들 가져오자. 
     checkedList = [];
-    checkedListReqeustResult = dbQuery({'query':'query pasing_websites_visitedCheck { pasing_websites_visitedCheck ( limit:100  filter: {websiteid: {eq:'+str(siteDataDict["rowid"])+'}} order_by: [{checkDate:DESC}]) {url checkDate}}'})
+    checkedListReqeustResult = dbQuery({'query':'query pasing_websites_visitedCheck { pasing_websites_visitedCheck ( limit:1000  filter: {websiteid: {eq:'+str(siteDataDict["rowid"])+'}} order_by: [{checkDate:DESC}]) {url checkDate}}'})
     if(checkedListReqeustResult != None):
       print('결과 ')
       print(checkedListReqeustResult)
