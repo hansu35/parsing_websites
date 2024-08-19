@@ -170,8 +170,8 @@ def processForOneSite(siteDataDict):
       # dump = json.dumps(sendUrls)
       dump = '['+sendUrls[0:-1]+']'
       # print(dump)
-      # print("============================================ 이후 쿼리출려 ")
-      # print({'query':'mutation pasing_websites_visitedCheck { insert_pasing_websites_visitedCheck ( objects:'+dump+') {affected_rows returning {rowid}} }'})
+      print("============================================ 이후 쿼리출려 ")
+      print({'query':'mutation pasing_websites_visitedCheck { insert_pasing_websites_visitedCheck ( objects:'+dump+') {affected_rows returning {rowid}} }'})
       dbQuery({'query':'mutation pasing_websites_visitedCheck { insert_pasing_websites_visitedCheck ( objects:'+dump+') {affected_rows returning {rowid}} }'})
 
   except Exception as e:
