@@ -122,12 +122,25 @@ def processForOneSite(siteDataDict):
   try:
     # 이미 확인한 글들 가져오자. 
     checkedList = [];
-    checkedListReqeustResult = dbQuery({'query':'query pasing_websites_visitedCheck { pasing_websites_visitedCheck ( limit:1000  filter: {websiteid: {eq:'+str(siteDataDict["rowid"])+'}} order_by: [{checkDate:DESC}]) {url checkDate}}'})
+    checkedListReqeustResult = dbQuery({'query':'query pasing_websites_visitedCheck { pasing_websites_visitedCheck ( limit:200  filter: {websiteid: {eq:'+str(siteDataDict["rowid"])+'}} order_by: [{checkDate:DESC}]) {rowid url checkDate}}'})
+
     if(checkedListReqeustResult != None):
       print('결과 ')
       print(checkedListReqeustResult)
       checkedList = checkedListReqeustResult["data"]["pasing_websites_visitedCheck"]
       print(checkedList)
+
+
+    # 100개가 넘는 결과가 나온다면 100개까지 결과를 줄여주자. 
+    # checkDate 순으로 역순으로 오기 때문에 100개 이후의 결과를 지워주면 된다. 
+    if(len(checkedList)>100):
+      deleteTargetList = checkedList[100:]
+      checkedList = checkedList[:100]
+      # 어떤 이유인지 한번에 지우는게 안된다. 하나씩??? 지워야 한다. 
+      for deleteTarget in deleteTargetList:
+        print(dbQuery({'query':'mutation delete_pasing_websites_visitedCheck { delete_pasing_websites_visitedCheck(filter: {rowid: {eq: '+str(deleteTarget["rowid"])+'}}) { affected_rows } }'}))
+
+
 
 
     page = requests.get(siteDataDict["pageUrl"], headers={'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'})
